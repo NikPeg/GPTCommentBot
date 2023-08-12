@@ -4,7 +4,9 @@ import vk
 
 import config
 import constants
+import messages
 from listen_group import listen_group
+from proxy import GPTProxy
 
 
 def create_comment(api: vk.API, owner_id: int, post_id: int, message: str) -> int:
@@ -14,7 +16,8 @@ def create_comment(api: vk.API, owner_id: int, post_id: int, message: str) -> in
 
 
 def process_post(post_id: int, text: str):
-    create_comment(api, -constants.GROUP_ID, post_id, f"{text} — это хорошая идея!")
+    comment = proxy.ask(message=messages.ANGRY_COMMENT.format(post=text))
+    create_comment(api, -constants.GROUP_ID, post_id, comment)
     for i in range(1000):
         print(i)
         time.sleep(5)
@@ -22,7 +25,7 @@ def process_post(post_id: int, text: str):
 
 if __name__ == "__main__":
     api = vk.API(access_token=config.ACCESS_TOKEN, v=constants.VK_VERSION)
-
+    proxy = GPTProxy()
     listen_group(constants.GROUP_ID, config.GROUP_TOKEN, process_post)
     # create_comment(api, constants.GROUP_ID, 23, f"писсуары — это хорошая идея!")
     # print(create_comment(api, -205429509, 12, "Бывают же люди в наше время"))
