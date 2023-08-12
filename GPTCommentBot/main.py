@@ -1,6 +1,10 @@
+import time
+
 import vk
+
 import config
 import constants
+from listen_group import listen_group
 
 
 def create_comment(api: vk.API, owner_id: int, post_id: int, message: str) -> int:
@@ -9,8 +13,18 @@ def create_comment(api: vk.API, owner_id: int, post_id: int, message: str) -> in
     return res.get("comment_id")
 
 
+def process_post(post_id: int, text: str):
+    create_comment(api, -constants.GROUP_ID, post_id, f"{text} — это хорошая идея!")
+    for i in range(1000):
+        print(i)
+        time.sleep(5)
+
+
 if __name__ == "__main__":
     api = vk.API(access_token=config.ACCESS_TOKEN, v=constants.VK_VERSION)
+
+    listen_group(constants.GROUP_ID, config.GROUP_TOKEN, process_post)
+    # create_comment(api, constants.GROUP_ID, 23, f"писсуары — это хорошая идея!")
     # print(create_comment(api, -205429509, 12, "Бывают же люди в наше время"))
     # print(api.groups.setLongPollSettings(group_id=205429509, enabled=1, wall_post_new=1))
     # print(api.groups.getLongPollServer(group_id=205429509))

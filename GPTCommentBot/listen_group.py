@@ -1,26 +1,19 @@
-import vk_api
-from vk_api import VkUpload
-from vk_api.utils import get_random_id
-from vk_api.bot_longpoll import VkBotLongPoll, VkBotEventType
 import threading
-import requests
-import random
 
-import config
-import constants
+import vk_api
+from vk_api.bot_longpoll import VkBotLongPoll, VkBotEventType
 
-if __name__ == '__main__':
+
+def listen_group(group_id: int, group_token: str, process_post: "(post_id: int, text: str) -> None"):
     print("Listening...")
     while True:
-        session = requests.Session()
-        vk_session = vk_api.VkApi(token=config.GROUP_TOKEN)
-        vk = vk_session.get_api()
-        upload = VkUpload(vk_session)
-        longpoll = VkBotLongPoll(vk_session, constants.GROUP_ID)
+        api = vk_api.VkApi(token=group_token)
+        long_poll = VkBotLongPoll(api, group_id)
         try:
-            for event in longpoll.listen():
+            for event in long_poll.listen():
                 if event.type == VkBotEventType.WALL_POST_NEW:
-                    # threading.Thread(target=processing_message, args=(event.obj.from_id, event.obj.text)).start()
                     print("New post!")
-        except Exception:
-            pass
+                    threading.Thread(target=process_post, args=(event.obj.id, event.obj.text)).start()
+
+        except Exception as e:
+            print(e)
