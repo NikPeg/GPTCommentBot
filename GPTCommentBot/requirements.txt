@@ -1,5 +1,4 @@
 pip~=23.1.2
 wheel~=0.40.0
 setuptools~=68.0.0
-vk
-vk_api
+vk~=3.0
