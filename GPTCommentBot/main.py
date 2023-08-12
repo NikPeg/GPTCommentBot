@@ -1,8 +1,7 @@
 import vk
 import config
+import constants
 
-vk_api = vk.session.API(access_token=config.ACCESS_TOKEN)
 
-# vk_api = vk_session.api()
-
-print(vk_api.session.wall.post(message='Hello world!', version=5.21))
+api = vk.API(access_token=config.ACCESS_TOKEN)
+print(api.users.get(user_ids=1, v=constants.VK_VERSION))
