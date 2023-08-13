@@ -4,7 +4,6 @@ import vk
 
 import config
 import constants
-import messages
 from character import Character
 from proxy import GPTProxy
 import threading
@@ -16,14 +15,7 @@ from vk_api.bot_longpoll import VkBotLongPoll, VkBotEventType
 characters: list[Character] = []
 
 
-def process_post(post_id: int, text: str):
-    # time.sleep(60)
-    global characters
-    for character in characters:
-        character.create_comment(-constants.GROUP_ID, post_id, text)
-
-
-def listen_group(group_id: int, group_token: str, process_post: "(post_id: int, text: str) -> None"):
+def listen_group(group_id: int, group_token: str):
     print("Listening...")
     while True:
         api = vk_api.VkApi(token=group_token)
@@ -32,7 +24,8 @@ def listen_group(group_id: int, group_token: str, process_post: "(post_id: int, 
             for event in long_poll.listen():
                 if event.type == VkBotEventType.WALL_POST_NEW:
                     print("New post!")
-                    threading.Thread(target=process_post, args=(event.obj.id, event.obj.text)).start()
+                    for character in characters:
+                        threading.Thread(target=character.process_post, args=(event.obj.id, event.obj.text)).start()
 
         except Exception as e:
             print(e)
@@ -46,7 +39,7 @@ if __name__ == "__main__":
     characters.append(Character("матери-одиночки", api, proxy))
     characters.append(Character("бати с завода", api, proxy))
     characters.append(Character("ворчливого деда", api, proxy))
-    listen_group(constants.GROUP_ID, config.GROUP_TOKEN, process_post)
+    listen_group(constants.GROUP_ID, config.GROUP_TOKEN)
 
 
     # create_comment(api, constants.GROUP_ID, 23, f"писсуары — это хорошая идея!")

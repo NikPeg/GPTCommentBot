@@ -1,5 +1,6 @@
 import vk
 
+import constants
 import messages
 from proxy import GPTProxy
 
@@ -15,3 +16,7 @@ class Character:
         comment: str = self.proxy.ask(message=messages.GPT_QUERY.format(phrase=self.phrase, post=post_text))
         res: dict = self.api.wall.createComment(owner_id=owner_id, post_id=post_id, message=comment)
         return res.get("comment_id")
+
+    def process_post(self, post_id: int, text: str):
+        # time.sleep(60)
+        self.create_comment(-constants.GROUP_ID, post_id, text)
