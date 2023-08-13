@@ -1,46 +1,43 @@
-import time
-
-import vk
-
-import config
-import constants
-from character import Character
-from proxy import GPTProxy
 import threading
 
 import vk_api
 from vk_api.bot_longpoll import VkBotLongPoll, VkBotEventType
 
+import config
+import constants
+from character import Character
 
-characters: list[Character] = []
 
+class GPTCommentBot:
+    def __init__(self, group_id: int, group_token: str, characters: list[Character] = None):
+        self.group_id: int = group_id
+        self.group_token: str = group_token
+        self.characters = characters or []
 
-def listen_group(group_id: int, group_token: str):
-    print("Listening...")
-    while True:
-        api = vk_api.VkApi(token=group_token)
-        long_poll = VkBotLongPoll(api, group_id)
-        try:
-            for event in long_poll.listen():
-                if event.type == VkBotEventType.WALL_POST_NEW:
-                    print("New post!")
-                    for character in characters:
-                        threading.Thread(target=character.process_post, args=(event.obj.id, event.obj.text)).start()
+    def listen_group(self):
+        print("Listening...")
+        while True:
+            api = vk_api.VkApi(token=self.group_token)
+            long_poll = VkBotLongPoll(api, self.group_id)
+            try:
+                for event in long_poll.listen():
+                    if event.type == VkBotEventType.WALL_POST_NEW:
+                        print("New post!")
+                        for character in self.characters:
+                            threading.Thread(target=character.process_post, args=(event.obj.id, event.obj.text)).start()
 
-        except Exception as e:
-            print(e)
+            except Exception as e:
+                print(e)
 
 
 if __name__ == "__main__":
-    api = vk.API(access_token=config.ACCESS_TOKEN, v=constants.VK_VERSION)
-    proxy = GPTProxy()
-    characters.append(Character("агрессивного школьника", api, proxy))
-    characters.append(Character("инста-блогерши", api, proxy))
-    characters.append(Character("матери-одиночки", api, proxy))
-    characters.append(Character("бати с завода", api, proxy))
-    characters.append(Character("ворчливого деда", api, proxy))
-    listen_group(constants.GROUP_ID, config.GROUP_TOKEN)
-
+    bot = GPTCommentBot(constants.GROUP_ID, config.GROUP_TOKEN)
+    bot.characters.append(Character("агрессивного школьника", config.ACCESS_TOKEN))
+    bot.characters.append(Character("инста-блогерши", config.ACCESS_TOKEN))
+    bot.characters.append(Character("матери-одиночки", config.ACCESS_TOKEN))
+    bot.characters.append(Character("бати с завода", config.ACCESS_TOKEN))
+    bot.characters.append(Character("ворчливого деда", config.ACCESS_TOKEN))
+    bot.listen_group()
 
     # create_comment(api, constants.GROUP_ID, 23, f"писсуары — это хорошая идея!")
     # print(create_comment(api, -205429509, 12, "Бывают же люди в наше время"))

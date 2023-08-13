@@ -1,15 +1,16 @@
 import vk
 
+import config
 import constants
 import messages
 from proxy import GPTProxy
 
 
 class Character:
-    def __init__(self, phrase: str, api: vk.API, proxy: GPTProxy):
+    def __init__(self, phrase: str, access_token: str):
         self.phrase = phrase
-        self.api = api
-        self.proxy = proxy
+        self.api = vk.API(access_token=access_token, v=constants.VK_VERSION)
+        self.proxy = GPTProxy()
 
     def create_comment(self, owner_id: int, post_id: int, post_text: str) -> int:
         """Creates a comment in specified wall and post, returns its id"""
