@@ -1,3 +1,5 @@
+import random
+import time
 from functools import cached_property
 
 import vk
@@ -10,11 +12,22 @@ import pymorphy2
 
 
 class Character:
-    def __init__(self, phrase: str, access_token: str, group_id: int):
+    def __init__(
+            self,
+            phrase: str,
+            access_token: str,
+            group_id: int,
+            frequency: float = 0.2,
+            min_delay: int = 60,
+            max_delay: int = 300,
+    ):
         self.phrase = phrase
         self.api = vk.API(access_token=access_token, v=constants.VK_VERSION)
         self.proxy = GPTProxy()
         self.group_id = group_id
+        self.frequency = frequency
+        self.min_delay = min_delay
+        self.max_delay = max_delay
         print(f"Create Character {phrase}")
 
     @cached_property
@@ -30,7 +43,6 @@ class Character:
 
     def create_comment(self, owner_id: int, post_id: int, post_text: str) -> int:
         """Creates a comment in specified wall and post, returns its id"""
-
         print(f"Character {self.phrase} is creating a comment to post {post_id}...")
         comment: str = self.proxy.ask(message=messages.GPT_QUERY.format(phrase=self.gent_phrase, post=post_text))
         res: dict = self.api.wall.createComment(owner_id=owner_id, post_id=post_id, message=comment)
@@ -39,6 +51,14 @@ class Character:
         return res.get("comment_id")
 
     def process_post(self, post_id: int, text: str):
-        # time.sleep(60)
         print(f"Character {self.phrase} is processing post {post_id}...")
+
+        if random.random() > self.frequency:
+            print(f"Character {self.phrase} choose not to comment.")
+            return
+
+        delay = random.randint(self.min_delay, self.max_delay)
+        print(f"Character {self.phrase} is sleeping for {delay} seconds.")
+        time.sleep(delay)
+
         self.create_comment(-self.group_id, post_id, text)
