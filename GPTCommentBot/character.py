@@ -17,6 +17,7 @@ class Character:
             phrase: str,
             access_token: str,
             group_id: int,
+            gpt_query: str = messages.GPT_QUERY,
             frequency: float = 0.2,
             min_delay: int = 60,
             max_delay: int = 300,
@@ -28,6 +29,7 @@ class Character:
         self.frequency = frequency
         self.min_delay = min_delay
         self.max_delay = max_delay
+        self.gpt_query = gpt_query
         print(f"Create Character {phrase}")
 
     @cached_property
@@ -44,7 +46,7 @@ class Character:
     def create_comment(self, owner_id: int, post_id: int, post_text: str) -> int:
         """Creates a comment in specified wall and post, returns its id"""
         print(f"Character {self.phrase} is creating a comment to post {post_id}...")
-        comment: str = self.proxy.ask(message=messages.GPT_QUERY.format(phrase=self.gent_phrase, post=post_text))
+        comment: str = self.proxy.ask(message=self.gpt_query.format(phrase=self.gent_phrase, post=post_text))
         res: dict = self.api.wall.createComment(owner_id=owner_id, post_id=post_id, message=comment)
         if "comment_id" in res.keys():
             print(f"Comment {res.get('comment_id')} has been posted.")
