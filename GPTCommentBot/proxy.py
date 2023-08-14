@@ -10,6 +10,7 @@ class GPTProxy:
 
     @retry(wait=wait_fixed(21), stop=stop_after_attempt(10))
     def ask(self, message):
+        print(f"Asking GPT: {message}")
         try:
             completion = openai.ChatCompletion.create(
                 model=self.model,
@@ -17,7 +18,7 @@ class GPTProxy:
                     {"role": "user", "content": message}
                 ]
             )
-
+            print(f"GPT's answer: {completion.choices[0].message.content}")
             return completion.choices[0].message.content
         except Exception as e:
             print(e)
