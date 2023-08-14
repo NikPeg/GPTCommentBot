@@ -35,10 +35,10 @@ class GPTCommentBot:
 if __name__ == "__main__":
     bot = GPTCommentBot(config.GROUP_ID, config.GROUP_TOKEN)
     bot.add_character("агрессивный школьник", config.ACCESS_TOKEN)
-    # bot.add_character("инста-блогерши", config.ACCESS_TOKEN)
-    # bot.add_character("матери-одиночки", config.ACCESS_TOKEN)
-    # bot.add_character("бати с завода", config.ACCESS_TOKEN)
-    # bot.add_character("ворчливого деда", config.ACCESS_TOKEN)
+    bot.add_character("инста-блогерша", config.ACCESS_TOKEN)
+    bot.add_character("мать-одиночка", config.ACCESS_TOKEN)
+    bot.add_character("батя с завода", config.ACCESS_TOKEN)
+    bot.add_character("ворчливый дед", config.ACCESS_TOKEN)
     bot.listen_group()
 
     # create_comment(api, constants.GROUP_ID, 23, f"писсуары — это хорошая идея!")
