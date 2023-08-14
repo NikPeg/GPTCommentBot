@@ -7,10 +7,11 @@ from proxy import GPTProxy
 
 
 class Character:
-    def __init__(self, phrase: str, access_token: str):
+    def __init__(self, phrase: str, access_token: str, group_id: int):
         self.phrase = phrase
         self.api = vk.API(access_token=access_token, v=constants.VK_VERSION)
         self.proxy = GPTProxy()
+        self.group_id = group_id
 
     def create_comment(self, owner_id: int, post_id: int, post_text: str) -> int:
         """Creates a comment in specified wall and post, returns its id"""
@@ -20,4 +21,4 @@ class Character:
 
     def process_post(self, post_id: int, text: str):
         # time.sleep(60)
-        self.create_comment(-constants.GROUP_ID, post_id, text)
+        self.create_comment(-self.group_id, post_id, text)

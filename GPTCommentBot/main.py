@@ -29,14 +29,17 @@ class GPTCommentBot:
             except Exception as e:
                 print(e)
 
+    def add_character(self, phrase: str, token: str):
+        self.characters.append(Character(phrase, token, self.group_id))
+
 
 if __name__ == "__main__":
     bot = GPTCommentBot(config.GROUP_ID, config.GROUP_TOKEN)
-    bot.characters.append(Character("агрессивного школьника", config.ACCESS_TOKEN))
-    bot.characters.append(Character("инста-блогерши", config.ACCESS_TOKEN))
-    bot.characters.append(Character("матери-одиночки", config.ACCESS_TOKEN))
-    bot.characters.append(Character("бати с завода", config.ACCESS_TOKEN))
-    bot.characters.append(Character("ворчливого деда", config.ACCESS_TOKEN))
+    bot.add_character("агрессивного школьника", config.ACCESS_TOKEN)
+    bot.add_character("инста-блогерши", config.ACCESS_TOKEN)
+    bot.add_character("матери-одиночки", config.ACCESS_TOKEN)
+    bot.add_character("бати с завода", config.ACCESS_TOKEN)
+    bot.add_character("ворчливого деда", config.ACCESS_TOKEN)
     bot.listen_group()
 
     # create_comment(api, constants.GROUP_ID, 23, f"писсуары — это хорошая идея!")
