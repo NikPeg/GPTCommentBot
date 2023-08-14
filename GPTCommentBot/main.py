@@ -48,6 +48,7 @@ class GPTCommentBot:
 if __name__ == "__main__":
     bot = GPTCommentBot(config.GROUP_ID, config.GROUP_TOKEN)
     bot.add_character("ворчливый дед", config.VOVA_TOKEN, messages.GPT_GIF_QUERY, 1.0, 0, 0)
+    bot.add_character("продавщица", config.SVETA_TOKEN, messages.GPT_GIF_QUERY, 1.0, 0, 0)
     bot.start()
 
     # second_bot = GPTCommentBot(config.SECOND_GROUP_ID, config.SECOND_GROUP_TOKEN)
