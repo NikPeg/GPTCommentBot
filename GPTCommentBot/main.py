@@ -4,7 +4,6 @@ import vk_api
 from vk_api.bot_longpoll import VkBotLongPoll, VkBotEventType
 
 import config
-import constants
 from character import Character
 
 
@@ -15,7 +14,7 @@ class GPTCommentBot:
         self.characters = characters or []
 
     def listen_group(self):
-        print("Listening...")
+        print(f"Listening group {self.group_id}...")
         while True:
             api = vk_api.VkApi(token=self.group_token)
             long_poll = VkBotLongPoll(api, self.group_id)

@@ -27,7 +27,7 @@ class Character:
         """Creates a comment in specified wall and post, returns its id"""
 
         print(f"Character {self.phrase} is creating a comment to post {post_id}...")
-        comment: str = self.proxy.ask(message=messages.GPT_QUERY.format(phrase=self.phrase, post=post_text))
+        comment: str = self.proxy.ask(message=messages.GPT_QUERY.format(phrase=self.gent_phrase, post=post_text))
         res: dict = self.api.wall.createComment(owner_id=owner_id, post_id=post_id, message=comment)
         return res.get("comment_id")
 

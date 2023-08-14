@@ -5,3 +5,4 @@ vk~=3.0
 vk_api~=11.9.9
 openai~=0.27.8
 tenacity~=8.2.2
+pymorphy2~=0.9.1
