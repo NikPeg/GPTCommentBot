@@ -31,7 +31,7 @@ class GPTCommentBot:
 
 
 if __name__ == "__main__":
-    bot = GPTCommentBot(constants.GROUP_ID, config.GROUP_TOKEN)
+    bot = GPTCommentBot(config.GROUP_ID, config.GROUP_TOKEN)
     bot.characters.append(Character("агрессивного школьника", config.ACCESS_TOKEN))
     bot.characters.append(Character("инста-блогерши", config.ACCESS_TOKEN))
     bot.characters.append(Character("матери-одиночки", config.ACCESS_TOKEN))
