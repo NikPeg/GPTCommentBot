@@ -46,7 +46,10 @@ class Character:
     def create_comment(self, owner_id: int, post_id: int, post_text: str) -> int:
         """Creates a comment in specified wall and post, returns its id"""
         print(f"Character {self.phrase} is creating a comment to post {post_id}...")
-        comment: str = self.proxy.ask(message=self.gpt_query.format(phrase=self.gent_phrase, post=post_text))
+
+        post_summary: str = self.proxy.ask(message=messages.SUMMARY_QUERY.format(post=post_text))
+        comment: str = self.proxy.ask(message=self.gpt_query.format(phrase=self.gent_phrase, post=post_summary))
+
         res: dict = self.api.wall.createComment(owner_id=owner_id, post_id=post_id, message=comment)
         if "comment_id" in res.keys():
             print(f"Comment {res.get('comment_id')} has been posted.")
