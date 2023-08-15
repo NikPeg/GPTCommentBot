@@ -58,7 +58,7 @@ if __name__ == "__main__":
     bot.add_character("шутница", config.VIKA_TOKEN, messages.JOKE_QUERY, 0.1)
     bot.add_character("мужик с завода", config.SERGEY_TOKEN, messages.GPT_GIF_QUERY, 0.08)
     bot.add_character("агрессивный школьник", config.LITTLE_VOVA_TOKEN, messages.GPT_GIF_QUERY, 0.1)
-    bot.add_character("эстетичная интеллектуалка", config.KATYA_TOKEN, messages.GPT_GIF_QUERY, 0.06)
+    bot.add_character("эстетичная девушка интеллектуалка", config.KATYA_TOKEN, messages.GPT_GIF_QUERY, 0.06)
     bot.add_character("инстаграм блогерши", config.DASHA_TOKEN, messages.GPT_GIF_QUERY, 0.07)
     bot.start()
 
