@@ -25,8 +25,13 @@ class GPTCommentBot:
                     if event.type == VkBotEventType.WALL_POST_NEW:
                         print("New post!")
                         for character in self.characters:
-                            threading.Thread(target=character.process_post, args=(event.obj.id, event.obj.text)).start()
-
+                            try:
+                                threading.Thread(
+                                    target=character.process_post,
+                                    args=(event.obj.id, event.obj.text),
+                                ).start()
+                            except Exception as e:
+                                print(e)
             except Exception as e:
                 print(e)
 
@@ -47,7 +52,7 @@ class GPTCommentBot:
 
 if __name__ == "__main__":
     bot = GPTCommentBot(config.US_ID, config.US_TOKEN)
-    bot.add_character("ворчливый дед", config.VOVA_TOKEN, messages.GPT_GIF_QUERY, 0.1)
+    # bot.add_character("ворчливый дед", config.VOVA_TOKEN, messages.GPT_GIF_QUERY, 0.1)
     bot.add_character("зрелая кассирша", config.SVETA_TOKEN, messages.GPT_GIF_QUERY, 0.05)
     bot.add_character("молодой рокер мотоциклист", config.ARTEM_TOKEN, messages.GPT_GIF_QUERY, 0.15)
     bot.add_character("шутница", config.VIKA_TOKEN, messages.JOKE_QUERY, 0.2)
